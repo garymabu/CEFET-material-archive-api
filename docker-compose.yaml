@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    ports:
+      - '5432:5432'
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: appUser
+      POSTGRES_DATABASE: postgres
+      POSTGRES_PASSWORD: pass
+
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    environment:
+      PORT: 3000
+      MAIN_DATABASE_URL: postgres
+      MAIN_DATABASE_NAME: postgres
+      MAIN_DATABASE_USERNAME: appUser
+      MAIN_DATABASE_PASSWORD: pass
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+    restart: always
