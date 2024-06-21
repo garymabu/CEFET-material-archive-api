@@ -11,13 +11,13 @@ export class LoginController {
     return await this.loginService.challengeEmailIfExists(email);
   }
 
-  @Post('/challenge/:username/:challengeToken')
+  @Post('/challenge/:userId/:challengeToken')
   async validateChallenge(
-    @Param('username') username: string,
+    @Param('userId') userId: number,
     @Param('challengeToken') challengeToken: string,
   ) {
     return await this.loginService.validateChallengeAndGenerateCredentials(
-      username,
+      userId,
       challengeToken,
     );
   }

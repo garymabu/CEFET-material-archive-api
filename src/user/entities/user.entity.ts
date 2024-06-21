@@ -2,7 +2,7 @@ import { EncryptionUtils } from 'src/encryption/encryption.utils';
 import { BaseEntity } from 'src/persistency/cefet-material-archive-db/base-entity';
 import { BeforeInsert, Column, Entity } from 'typeorm';
 
-enum UserType {
+export enum UserType {
   ADMIN,
   STUDENT,
   TEACHE,

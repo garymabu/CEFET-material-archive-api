@@ -16,7 +16,9 @@ export class MaterialService {
   }
 
   findAll() {
-    return this.materialRepository.find();
+    return this.materialRepository.find({
+      relations: ['subject'],
+    });
   }
 
   findOne(id: number) {
