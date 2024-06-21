@@ -15,11 +15,11 @@ services:
   app:
     build: .
     ports:
-      - '3000:3000'
+      - '3001:3001'
     depends_on:
       - postgres
     environment:
-      PORT: 3000
+      PORT: 3001
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       DATABASE_USERNAME: appUser
@@ -32,6 +32,8 @@ services:
       SMTP_SERVER_EMAIL: garyexpert86@gmail.com
       JWT_SECRET: 3de0e10686a7ede8474d796aebfad760f73481105dfd47979cbc5b660806ca7da92d00101dfb68c0ccc98f01c79d0348460cc9cc8c36fcbaa98d33ba90071aa4
       FILE_SERVER_BASE_URL: http://localhost:3002
+    volumes:
+      - uploads:/usr/src/app/dist/uploads
 
   redis:
     image: redis:latest
@@ -42,6 +44,9 @@ services:
   file-server:
     image: nginx
     volumes:
-      - /app/uploads:/usr/share/nginx/html
+      - uploads:/usr/share/nginx/html
     ports:
       - 3002:80
+
+volumes:
+  uploads:
