@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User, UserType } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EncryptionUtils } from 'src/encryption/encryption.utils';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class UserService {
@@ -12,8 +13,21 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-  create(createUserDto: CreateUserDto) {
-    return this.userRepository.save(createUserDto);
+  create({ email, name, type }: CreateUserDto) {
+    return this.userRepository.save({
+      displayName: name,
+      email,
+      userName: email,
+      type,
+      password: randomBytes(16).toString('hex'),
+      passwordHash: EncryptionUtils.hashPassword(
+        randomBytes(16).toString('hex'),
+      ),
+    });
+  }
+
+  findAllByType(type: UserType) {
+    return this.userRepository.find({ where: { type } });
   }
 
   findAll() {
@@ -38,8 +52,13 @@ export class UserService {
     });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update(id, updateUserDto);
+  update(id: number, { email, name, type }: UpdateUserDto) {
+    return this.userRepository.update(id, {
+      displayName: name,
+      email,
+      userName: email,
+      type,
+    });
   }
 
   remove(id: number) {

@@ -16,7 +16,7 @@ export class TeacherService {
   }
 
   findAll() {
-    return this.teacherRepository.find();
+    return this.teacherRepository.find({ relations: ['user', 'subjects'] });
   }
 
   findOne(id: number) {

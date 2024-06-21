@@ -1,3 +1,7 @@
-import { User } from '../entities/user.entity';
+import { UserType } from '../entities/user.entity';
 
-export class CreateUserDto extends User {}
+export class CreateUserDto {
+  name: string;
+  email: string;
+  type: UserType;
+}
