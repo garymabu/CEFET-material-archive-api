@@ -25,7 +25,12 @@ export class LoginService {
     );
 
     if (isValid) {
-      return await this.authService.generateCredentialsByUserName(username);
+      const credentials =
+        await this.authService.generateCredentialsByUserName(username);
+      return {
+        ...credentials,
+        userId,
+      };
     }
     throw new UnauthorizedException();
   }

@@ -21,11 +21,10 @@ export class AuthService {
 
     const challengeToken = Math.floor(100000 + Math.random() * 900000);
 
-    const result = await this.loginChallengeService.createChallenge(
+    await this.loginChallengeService.createChallenge(
       user.id.toString(),
       challengeToken.toString(),
     );
-    console.log('result', result);
     await this.emailService.sendEmail(
       email,
       'Login Challenge',
@@ -46,7 +45,6 @@ export class AuthService {
       username,
       EncryptionUtils.hashPassword(password),
     );
-    console.log('user', user);
     return !!user;
   }
 

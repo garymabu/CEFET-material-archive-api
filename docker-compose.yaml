@@ -8,8 +8,8 @@ services:
     restart: always
     environment:
       POSTGRES_HOST: postgres
-      POSTGRES_USER: appUser
       POSTGRES_DATABASE: postgres
+      POSTGRES_USER: appUser
       POSTGRES_PASSWORD: pass
 
   app:
@@ -20,13 +20,28 @@ services:
       - postgres
     environment:
       PORT: 3000
-      MAIN_DATABASE_URL: postgres
-      MAIN_DATABASE_NAME: postgres
-      MAIN_DATABASE_USERNAME: appUser
-      MAIN_DATABASE_PASSWORD: pass
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: appUser
+      DATABASE_PASSWORD: pass
+      DATABASE_DATABASE: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SMTP_SERVER_USERNAME: garyexpert86@gmail.com
+      SMTP_SERVER_PASSWORD: 'scmi wvdm eomw zgri'
+      SMTP_SERVER_EMAIL: garyexpert86@gmail.com
+      JWT_SECRET: 3de0e10686a7ede8474d796aebfad760f73481105dfd47979cbc5b660806ca7da92d00101dfb68c0ccc98f01c79d0348460cc9cc8c36fcbaa98d33ba90071aa4
+      FILE_SERVER_BASE_URL: http://localhost:3002
 
   redis:
     image: redis:latest
     ports:
       - '6379:6379'
     restart: always
+
+  file-server:
+    image: nginx
+    volumes:
+      - /app/uploads:/usr/share/nginx/html
+    ports:
+      - 3002:80

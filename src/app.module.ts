@@ -6,6 +6,10 @@ import { LoginModule } from './login/login.module';
 import { EnvironmentModule } from './environment/environment.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IOREDIS_PROVIDER } from './persistency/login-challenge-redis/login-challenge-redis.provider';
+import { TeacherModule } from './teacher/teacher.module';
+import { SubjectModule } from './subject/subject.module';
+import { MaterialModule } from './material/material.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -30,6 +34,10 @@ import { IOREDIS_PROVIDER } from './persistency/login-challenge-redis/login-chal
     HealthModule,
     UserModule,
     LoginModule,
+    TeacherModule,
+    SubjectModule,
+    MaterialModule,
+    FileModule,
   ],
   providers: [IOREDIS_PROVIDER],
 })

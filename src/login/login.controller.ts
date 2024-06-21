@@ -24,6 +24,6 @@ export class LoginController {
 
   @Post('/')
   async login(@Body() loginDTO: LoginDTO) {
-    return this.login(loginDTO);
+    return this.loginService.login(loginDTO);
   }
 }
