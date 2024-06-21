@@ -1,14 +1,16 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { EncryptionUtils } from 'src/encryption/encryption.utils';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject('USER_REPOSITORY')
-    protected readonly userRepository: Repository<User>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
   create(createUserDto: CreateUserDto) {
     return this.userRepository.save(createUserDto);
@@ -22,11 +24,18 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async challengeEmailIfExists(email: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
-    if (!user) {
-      throw new BadRequestException('User not found');
-    }
+  findOneByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
+  findOneByUsername(userName: string) {
+    return this.userRepository.findOne({ where: { userName } });
+  }
+
+  findOneByUsernameAndPasswordHash(userName: string, password: string) {
+    return this.userRepository.findOne({
+      where: { userName, passwordHash: password },
+    });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
@@ -35,5 +44,10 @@ export class UserService {
 
   remove(id: number) {
     return this.userRepository.delete(id);
+  }
+
+  updatePassword(id: number, password: string) {
+    const passwordHash = EncryptionUtils.hashPassword(password);
+    return this.userRepository.update(id, { passwordHash });
   }
 }

@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -23,11 +26,6 @@ export class UserController {
   @Get()
   findAll() {
     return this.userService.findAll();
-  }
-
-  @Get('/challenge/:email')
-  async challengeEmailIfExists(@Param('email') email: string) {
-    await this.userService.challengeEmailIfExists(email);
   }
 
   @Get(':id')
@@ -43,5 +41,10 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
+  }
+
+  @Patch(':id/update-password')
+  updatePassword(@Param('id') id: string, @Body('password') password: string) {
+    return this.userService.updatePassword(+id, password);
   }
 }

@@ -1,5 +1,6 @@
+import { EncryptionUtils } from 'src/encryption/encryption.utils';
 import { BaseEntity } from 'src/persistency/cefet-material-archive-db/base-entity';
-import { Column, Entity } from 'typeorm';
+import { BeforeInsert, Column, Entity } from 'typeorm';
 
 enum UserType {
   ADMIN,
@@ -9,6 +10,8 @@ enum UserType {
 
 @Entity()
 export class User extends BaseEntity {
+  password: string;
+
   @Column({ select: false })
   passwordHash: string;
 
@@ -27,4 +30,9 @@ export class User extends BaseEntity {
 
   @Column()
   email: string;
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.passwordHash = await EncryptionUtils.hashPassword(this.password);
+  }
 }
