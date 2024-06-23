@@ -28,7 +28,7 @@ export class User extends BaseEntity {
   @Column()
   userName: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @BeforeInsert()

@@ -11,7 +11,9 @@ export enum MaterialType {
 
 @Entity()
 export class Material extends BaseEntity {
-  @ManyToOne(() => Subject, (subject) => subject.materials)
+  @ManyToOne(() => Subject, (subject) => subject.materials, {
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'subjectId' })
   subject: Subject;
 
@@ -28,6 +30,6 @@ export class Material extends BaseEntity {
   @Column()
   dataUrl: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   subjectId: number;
 }

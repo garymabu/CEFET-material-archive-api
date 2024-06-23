@@ -14,11 +14,11 @@ export class LoginController {
   @Post('/challenge/:userId/:challengeToken')
   async validateChallenge(
     @Param('userId') userId: number,
-    @Param('challengeToken') challengeToken: string,
+    @Param('challengeToken') challengeToken: string
   ) {
     return await this.loginService.validateChallengeAndGenerateCredentials(
       userId,
-      challengeToken,
+      challengeToken
     );
   }
 

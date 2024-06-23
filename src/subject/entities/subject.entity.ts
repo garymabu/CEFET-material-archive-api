@@ -5,14 +5,16 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Subject extends BaseEntity {
-  @ManyToOne(() => Teacher, (teacher) => teacher.subjects)
+  @ManyToOne(() => Teacher, (teacher) => teacher.subjects, {
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'teacherId' })
   teacher: Teacher;
 
   @OneToMany(() => Material, (material) => material.subject)
   materials: Material[];
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   teacherId: number;
 
   @Column({ type: 'int' })

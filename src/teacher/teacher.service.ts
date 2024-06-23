@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 export class TeacherService {
   constructor(
     @InjectRepository(Teacher)
-    private teacherRepository: Repository<Teacher>,
+    private teacherRepository: Repository<Teacher>
   ) {}
   create(createUserDto: CreateTeacherDto) {
     return this.teacherRepository.save(createUserDto);
@@ -22,6 +22,7 @@ export class TeacherService {
   findOne(id: number) {
     return this.teacherRepository.findOne({ where: { id } });
   }
+
   update(id: number, updateUserDto: UpdateTeacherDto) {
     return this.teacherRepository.update(id, updateUserDto);
   }

@@ -5,13 +5,15 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity()
 export class Teacher extends BaseEntity {
-  @OneToMany(() => Subject, (subject) => subject.teacher)
+  @OneToMany(() => Subject, (subject) => subject.teacher, {
+    onDelete: 'SET NULL',
+  })
   subjects: Subject[];
 
   @OneToOne(() => User)
-  @JoinColumn({ name: 'userId' }) // This is the column in the Teacher table that will be used as the foreign key
+  @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   userId: number;
 }
