@@ -1,6 +1,7 @@
 import { BaseEntity } from 'src/persistency/cefet-material-archive-db/base-entity';
+import { Rating } from 'src/rating/entities/rating.entity';
 import { Subject } from 'src/subject/entities/subject.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 export enum MaterialType {
   SLIDE,
@@ -11,6 +12,9 @@ export enum MaterialType {
 
 @Entity()
 export class Material extends BaseEntity {
+  @OneToMany(() => Rating, (rating) => rating.material)
+  ratings: Rating[];
+
   @ManyToOne(() => Subject, (subject) => subject.materials, {
     onDelete: 'SET NULL',
   })

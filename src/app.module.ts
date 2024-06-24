@@ -10,6 +10,7 @@ import { TeacherModule } from './teacher/teacher.module';
 import { SubjectModule } from './subject/subject.module';
 import { MaterialModule } from './material/material.module';
 import { FileModule } from './file/file.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { FileModule } from './file/file.module';
     SubjectModule,
     MaterialModule,
     FileModule,
+    RatingModule,
   ],
   providers: [IOREDIS_PROVIDER],
 })

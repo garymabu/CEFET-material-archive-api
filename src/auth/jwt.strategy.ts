@@ -7,6 +7,11 @@ import {
   EnvironmentService,
 } from 'src/environment/environment.service';
 
+export interface JwtPayload {
+  username: string;
+  userId: number;
+}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(environmentService: EnvironmentService) {
@@ -17,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username };
+  async validate(payload: JwtPayload) {
+    return { userId: payload.userId, username: payload.username };
   }
 }

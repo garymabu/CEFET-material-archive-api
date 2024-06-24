@@ -4,6 +4,7 @@ import { EmailService } from 'src/email/email.service';
 import { EncryptionUtils } from 'src/encryption/encryption.utils';
 import { LoginChallengeService } from 'src/login-challenge/login-challenge.service';
 import { UserService } from 'src/user/user.service';
+import { JwtPayload } from './jwt.strategy';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +12,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly loginChallengeService: LoginChallengeService,
     private readonly emailService: EmailService,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
   async challengeEmailIfExists(email: string) {
     const user = await this.userService.findOneByEmail(email);
@@ -23,12 +24,12 @@ export class AuthService {
 
     await this.loginChallengeService.createChallenge(
       user.id.toString(),
-      challengeToken.toString(),
+      challengeToken.toString()
     );
     await this.emailService.sendEmail(
       email,
       'Login Challenge',
-      `Your login challenge is ${challengeToken}`,
+      `Your login challenge is ${challengeToken}`
     );
 
     return { userId: user.id };
@@ -43,7 +44,7 @@ export class AuthService {
   async validateCredentials(username: string, password: string) {
     const user = await this.userService.findOneByUsernameAndPasswordHash(
       username,
-      EncryptionUtils.hashPassword(password),
+      EncryptionUtils.hashPassword(password)
     );
     return !!user;
   }
@@ -55,7 +56,7 @@ export class AuthService {
       bearerToken: this.jwtService.sign({
         userId: user.id,
         username: user.userName,
-      }),
+      } as JwtPayload),
     };
   }
   async generateCredentialsByUserId(userId: number) {
@@ -65,7 +66,7 @@ export class AuthService {
       bearerToken: this.jwtService.sign({
         userId: user.id,
         username: user.userName,
-      }),
+      } as JwtPayload),
     };
   }
 }

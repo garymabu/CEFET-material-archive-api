@@ -6,11 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { MaterialService } from './material.service';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('material')
 export class MaterialController {
   constructor(private readonly materialService: MaterialService) {}
@@ -22,7 +26,7 @@ export class MaterialController {
 
   @Get()
   findAll() {
-    return this.materialService.findAll();
+    return this.materialService.findAllWithRatings();
   }
 
   @Get(':id')
@@ -33,7 +37,7 @@ export class MaterialController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateMaterialDto: UpdateMaterialDto,
+    @Body() updateMaterialDto: UpdateMaterialDto
   ) {
     return this.materialService.update(+id, updateMaterialDto);
   }
@@ -41,5 +45,19 @@ export class MaterialController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.materialService.remove(+id);
+  }
+
+  @Post(':id/rate')
+  rateMaterial(
+    @Request() req,
+    @Param('id') id: string,
+    @Body('value') value: number
+  ) {
+    const userId = req.user.userId;
+    return this.materialService.rateMaterial({
+      materialId: +id,
+      userId,
+      value,
+    });
   }
 }

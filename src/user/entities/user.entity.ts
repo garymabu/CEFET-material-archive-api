@@ -1,6 +1,7 @@
 import { EncryptionUtils } from 'src/encryption/encryption.utils';
 import { BaseEntity } from 'src/persistency/cefet-material-archive-db/base-entity';
-import { BeforeInsert, Column, Entity } from 'typeorm';
+import { Rating } from 'src/rating/entities/rating.entity';
+import { BeforeInsert, Column, Entity, OneToMany } from 'typeorm';
 
 export enum UserType {
   ADMIN,
@@ -10,6 +11,9 @@ export enum UserType {
 
 @Entity()
 export class User extends BaseEntity {
+  @OneToMany(() => Rating, (rating) => rating.material)
+  ratings: Rating[];
+
   password: string;
 
   @Column({ select: false })

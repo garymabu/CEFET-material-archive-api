@@ -10,7 +10,7 @@ export class Teacher extends BaseEntity {
   })
   subjects: Subject[];
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
 
