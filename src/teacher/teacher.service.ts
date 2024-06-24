@@ -3,7 +3,9 @@ import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { Teacher } from './entities/teacher.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Like, Repository } from 'typeorm';
+import { FindTeachersDTO } from './dto/find-teachers.dto';
+import { addDays } from 'date-fns';
 
 @Injectable()
 export class TeacherService {
@@ -15,8 +17,22 @@ export class TeacherService {
     return this.teacherRepository.save(createUserDto);
   }
 
-  findAll() {
-    return this.teacherRepository.find({ relations: ['user', 'subjects'] });
+  findAllBy(findTeachersDTO: FindTeachersDTO) {
+    return this.teacherRepository.find({
+      where: {
+        user: {
+          displayName: findTeachersDTO.name
+            ? Like(`%${findTeachersDTO.name}%`)
+            : undefined,
+          type: findTeachersDTO.userType,
+          createdAt: Between(
+            findTeachersDTO.startDate ?? new Date('2024-01-01'),
+            findTeachersDTO.endDate ?? addDays(new Date(), 1)
+          ),
+        },
+      },
+      relations: ['user', 'subjects'],
+    });
   }
 
   findOne(id: number) {

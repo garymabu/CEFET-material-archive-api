@@ -7,11 +7,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { SubjectService } from './subject.service';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { FindSubjectsDTO } from './dto/find-subjects.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('subject')
@@ -24,8 +27,8 @@ export class SubjectController {
   }
 
   @Get()
-  findAll() {
-    return this.subjectService.findAll();
+  findAll(@Query(new ValidationPipe()) query: FindSubjectsDTO) {
+    return this.subjectService.findAllBy(query);
   }
 
   @Get(':id')

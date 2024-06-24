@@ -8,11 +8,13 @@ import {
   Delete,
   UseGuards,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { FindUserDTO } from './dto/find-user.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -25,9 +27,8 @@ export class UserController {
   }
 
   @Get()
-  findAll(@Query('type') type: string) {
-    console.log('type', type);
-    return this.userService.findAllByType(Number(type));
+  findAll(@Query(new ValidationPipe()) query: FindUserDTO) {
+    return this.userService.findAllBy(query);
   }
 
   @Get(':id')

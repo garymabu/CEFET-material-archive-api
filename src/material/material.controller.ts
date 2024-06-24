@@ -8,11 +8,14 @@ import {
   Delete,
   Request,
   UseGuards,
+  Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MaterialService } from './material.service';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { FindMaterialsDTO } from './dto/find-material.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('material')
@@ -26,8 +29,8 @@ export class MaterialController {
   }
 
   @Get()
-  findAll() {
-    return this.materialService.findAllWithRatings();
+  findAll(@Query(new ValidationPipe()) query: FindMaterialsDTO) {
+    return this.materialService.findAllWithRatingsBy(query);
   }
 
   @Get(':id')

@@ -3,10 +3,11 @@ import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
 import { Material } from './entities/material.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Rating } from 'src/rating/entities/rating.entity';
 import { RatingService } from 'src/rating/rating.service';
 import { RateMaterialDto } from './dto/rate-material.dto';
+import { FindMaterialsDTO } from './dto/find-material.dto';
 
 @Injectable()
 export class MaterialService {
@@ -19,8 +20,14 @@ export class MaterialService {
     return this.materialRepository.save(createMaterialDto);
   }
 
-  async findAllWithRatings() {
+  async findAllWithRatingsBy(findMaterialsDTO: FindMaterialsDTO) {
     const materials = await this.materialRepository.find({
+      where: {
+        description: findMaterialsDTO.description
+          ? Like(`%${findMaterialsDTO.description}%`)
+          : undefined,
+        subjectId: findMaterialsDTO.subjectId,
+      },
       relations: ['ratings', `subject`],
     });
 

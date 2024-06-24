@@ -7,11 +7,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { FindTeachersDTO } from './dto/find-teachers.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('teacher')
@@ -24,8 +27,8 @@ export class TeacherController {
   }
 
   @Get()
-  findAll() {
-    return this.teacherService.findAll();
+  findAll(@Query(new ValidationPipe()) query: FindTeachersDTO) {
+    return this.teacherService.findAllBy(query);
   }
 
   @Get(':id')
