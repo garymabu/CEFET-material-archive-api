@@ -21,7 +21,7 @@ export class MaterialService {
 
   async findAllWithRatings() {
     const materials = await this.materialRepository.find({
-      relations: ['ratings'],
+      relations: ['ratings', `subject`],
     });
 
     return materials.map((material) => ({
