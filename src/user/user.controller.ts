@@ -15,7 +15,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FindUserDTO } from './dto/find-user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @UseGuards(AuthGuard('jwt'))
 @Controller('user')
 export class UserController {

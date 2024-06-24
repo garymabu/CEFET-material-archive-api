@@ -15,7 +15,9 @@ import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FindSubjectsDTO } from './dto/find-subjects.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Subject')
 @UseGuards(AuthGuard('jwt'))
 @Controller('subject')
 export class SubjectController {

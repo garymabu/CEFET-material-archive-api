@@ -15,7 +15,9 @@ import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FindTeachersDTO } from './dto/find-teachers.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Professor')
 @UseGuards(AuthGuard('jwt'))
 @Controller('teacher')
 export class TeacherController {

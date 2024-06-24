@@ -16,7 +16,9 @@ import { CreateMaterialDto } from './dto/create-material.dto';
 import { UpdateMaterialDto } from './dto/update-material.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FindMaterialsDTO } from './dto/find-material.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Material')
 @UseGuards(AuthGuard('jwt'))
 @Controller('material')
 export class MaterialController {
